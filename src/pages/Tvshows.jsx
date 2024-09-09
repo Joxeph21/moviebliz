@@ -12,14 +12,13 @@ function Tvshows() {
   const [searchParams] = useSearchParams();
   const currPage = searchParams.get("page") || 1;
   const [page, setPage] = useState(currPage);
-  const { tvShows = [], isLoading, error } = useTv({page});
+  const { tvShows = [], isLoading, error } = useTv({ page });
 
   if (isLoading) return <Loader />;
 
   const sortBy = searchParams.get("sortBy") || "popularity-desc";
   const [field, direction] = sortBy.split("-");
   const modifier = direction === "desc" ? -1 : 1;
-
 
   const sortedTv = Array.isArray(tvShows)
     ? [...tvShows].sort((a, b) => {
@@ -32,6 +31,8 @@ function Tvshows() {
         }
       })
     : [];
+
+  console.log(tvShows);
 
   return (
     <Banner>
