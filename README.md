@@ -1,6 +1,6 @@
 # MovieBliz
 
-**Imagine a website like Goodreads, but instead of reviewing books, we're reviewing movies.**
+**Imagine a website like Goodreads, but instead of reviewing books, we review movies.**
 
 MovieBliz is a dynamic and user-friendly platform designed for movie enthusiasts who want to review, rate, and organize their favorite films. Currently, MovieBliz allows users to log in, add reviews, and categorize movies into favorites, watchlists, or custom lists. In the upcoming update, MovieBliz will introduce community features, allowing users to share their reviews with friends through unique links.
 
