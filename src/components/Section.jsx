@@ -17,8 +17,6 @@ function Section({
 }) {
   const navigate = useNavigate();
 
-  if (array?.length === 0) return;
-
   return (
     <div className="my-4 flex w-dvw max-w-[1300px] flex-col gap-10 p-2">
       {array?.length > 0 ? (
