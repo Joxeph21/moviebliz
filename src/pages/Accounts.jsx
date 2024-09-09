@@ -10,7 +10,8 @@ import EditUser from "../user/Forms/EditUser";
 import ReviewCard from "../ui/ReviewCard";
 
 function Accounts() {
-  const { watchlistArray, favoritesArray, listsArray, reviewsArray } = useUserData();
+  const { watchlistArray, favoritesArray, listsArray, reviewsArray } =
+    useUserData();
   const { user, Logout } = useAuth();
   const { name, profileImage, isAuthenticated } = user;
   const navigate = useNavigate();
@@ -34,18 +35,27 @@ function Accounts() {
             <h1 className="text-center text-xl font-bold">
               Hi, {name ? name : "Guest"}
             </h1>
-            {!name || !isAuthenticated ? <Button type={'primary'} onClick={() => navigate("/create-account")} >Sign Up</Button> :<Modal.Open opens={"Edit User"}>
-              <Button type={"secondary"}>Edit Profile</Button>
-            </Modal.Open>}
+            {!name || !isAuthenticated ? (
+              <Button
+                type={"primary"}
+                onClick={() => navigate("/create-account")}
+              >
+                Sign Up
+              </Button>
+            ) : (
+              <Modal.Open opens={"Edit User"}>
+                <Button type={"secondary"}>Edit Profile</Button>
+              </Modal.Open>
+            )}
           </div>
           <Section
-            isUser
+            isUser={true}
             RouteLink={"/user/favorites"}
             title={"Tv Shows and Movies you Liked"}
             array={favoritesArray}
           />
           <Section
-            isUser
+            isUser={true}
             title={`Your List`}
             RouteLink={"/user/lists"}
             array={listsArray}
@@ -62,7 +72,9 @@ function Accounts() {
             type="videocard"
             RouteLink={"/user/reviews"}
             array={reviewsArray}
-            render={(review) => <ReviewCard key={review.movie.id} array={review}/>}
+            render={(review) => (
+              <ReviewCard key={review.movie.id} array={review} />
+            )}
           />
         </div>
         <Modal.Window name={"Edit User"}>
