@@ -39,22 +39,31 @@ To clone and run this project locally, follow these steps:
    git clone https://github.com/your-username/moviebliz.git
    ```
 2. Navigate to the project directory:
-   ```cd moviebliz
+   ```
+   cd moviebliz
+
 
    ```
 3. Install dependencies:
 
+   ```
+   npm install
 
-    ```npm install
+   ```
 
-4.  Create a .env file and Get API key
-    ```REACT_APP_TMDB_API_KEY=your_api_key_here
+4. Create a .env file and Get API key
 
-    ```
-5.  Start Server
-    ```npm start
+   ```
+   REACT_APP_TMDB_API_KEY=your_api_key_here
 
-    ```
+   ```
+
+5. Start Server
+
+   ```
+   npm start
+
+   ```
 
 ## Contributing
 
