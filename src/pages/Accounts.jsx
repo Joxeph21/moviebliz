@@ -80,27 +80,29 @@ function Accounts() {
         <Modal.Window name={"Edit User"}>
           <EditUser />
         </Modal.Window>
-        <div className="w-full space-y-3 p-2">
-          <h2>Account</h2>
-          <p className="text-sm text-neutral-400">
-            This might end up deleting your account.
-          </p>
 
-          <Modal.Open opens={"logout"}>
-            {!name ||
-              (!isAuthenticated && <Button type={"danger"}>Log Out</Button>)}
-          </Modal.Open>
-          <Modal.Window name={"logout"}>
-            <ConfirmDelete
-              title={"Logout"}
-              warnText="Logout"
-              onConfirm={handleLogout}
-              message={
-                "Are you sure you want to Logout?. This will result in loss of data and you might be required to sign up again "
-              }
-            />
-          </Modal.Window>
-        </div>
+        {name && isAuthenticated && (
+          <div className="w-full space-y-3 p-2">
+            <h2>Account</h2>
+            <p className="text-sm text-neutral-400">
+              This might end up deleting your account.
+            </p>
+
+            <Modal.Open opens={"logout"}>
+              <Button type={"danger"}>Log Out</Button>
+            </Modal.Open>
+            <Modal.Window name={"logout"}>
+              <ConfirmDelete
+                title={"Logout"}
+                warnText="Logout"
+                onConfirm={handleLogout}
+                message={
+                  "Are you sure you want to Logout?. This will result in loss of data and you might be required to sign up again "
+                }
+              />
+            </Modal.Window>
+          </div>
+        )}
       </Modal>
     </Banner>
   );
