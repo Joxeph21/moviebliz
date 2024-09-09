@@ -15,8 +15,8 @@ function UserLinks() {
   const navigate = useNavigate();
 
   function handleLogout() {
-    setNavOpen(false);
     Logout()
+    setNavOpen(false);
     navigate("/");
   }
 
