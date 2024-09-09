@@ -1,5 +1,5 @@
 import { Tooltip, Zoom } from "@mui/material";
-import MiniIcons from "./miniIcons";
+import MiniIcons from "./MiniIcons";
 import { HiPlus } from "react-icons/hi2";
 import { LuHeart } from "react-icons/lu";
 import Button from "./Button";
