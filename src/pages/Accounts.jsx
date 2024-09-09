@@ -85,8 +85,10 @@ function Accounts() {
           <p className="text-sm text-neutral-400">
             This might end up deleting your account.
           </p>
+
           <Modal.Open opens={"logout"}>
-            <Button type={"danger"}>Log Out</Button>
+            {!name ||
+              (!isAuthenticated && <Button type={"danger"}>Log Out</Button>)}
           </Modal.Open>
           <Modal.Window name={"logout"}>
             <ConfirmDelete
