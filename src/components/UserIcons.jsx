@@ -76,7 +76,7 @@ function UserIcons() {
   useEffect(() => {
     if (profileImage) {
       const img = new Image();
-      img.src = `src/user/profile-pics/${profileImage.toLowerCase()}`;
+      img.src = `src/user/profile-pics/${profileImage}`;
       img.onload = () => setImageLoaded(true);
       img.onerror = () => setImageLoaded(false); // Handle error loading image
     }
@@ -123,7 +123,7 @@ function UserIcons() {
             <div className="h-8 w-8 overflow-hidden rounded-sm">
               {imageLoaded ? (
                 <img
-                  src={`src/user/profile-pics/${profileImage.toLowerCase()}`}
+                  src={`src/user/profile-pics/${profileImage}`}
                   alt={name + `_profile_picture`}
                   className="h-full w-full object-cover"
                 />

@@ -27,7 +27,7 @@ function Accounts() {
           <div className="grid h-96 w-full content-center items-center justify-center gap-3">
             <div className="flex h-40 w-40 overflow-hidden rounded-lg object-cover object-center">
               <img
-                src={`src/user/profile-pics/${profileImage ? profileImage.toLowercase() : "profile1.jpg"}`}
+                src={`src/user/profile-pics/${profileImage ? profileImage : "profile1.jpg"}`}
                 alt={name + `_profile_picture`}
               />
             </div>
