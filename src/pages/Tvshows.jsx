@@ -12,7 +12,7 @@ function Tvshows() {
   const [searchParams] = useSearchParams();
   const currPage = searchParams.get("page") || 1;
   const [page, setPage] = useState(currPage);
-  const { tvShows = [], isLoading, error } = useTv(page);
+  const { tvShows = [], isLoading, error } = useTv({page});
 
   if (isLoading) return <Loader />;
 
