@@ -11,11 +11,9 @@ function SideNavBar() {
   const { name, profileImage } = user;
   const navigate = useNavigate();
 
-  // Use state to store the profile image
   const [image, setImage] = useState("");
 
   useEffect(() => {
-    // Set the profile image when the component mounts or when the profileImage changes
     setImage(profileImage ? profileImage : "profile1.jpg");
   }, [profileImage]);
 

@@ -17,7 +17,7 @@ function Input({
         {title}
       </label>
       <input
-        className={`w-80 rounded-md p-3 ${error ? `ring-2 ring-red-400` : ""} text-sm text-black placeholder:text-black focus:outline-none focus:ring focus:ring-green-300`}
+        className={`w-80 rounded-md p-3 ${error ? `ring-2 ring-red-400` : ""} text-sm text-black placeholder:text-black/60 focus:outline-none focus:ring focus:ring-green-300`}
         type={type}
         required={required}
         defaultValue={defaultValue}

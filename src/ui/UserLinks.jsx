@@ -16,7 +16,7 @@ function UserLinks() {
 
   function handleLogout() {
     setNavOpen(false);
-    Logout();
+    Logout()
     navigate("/");
   }
 

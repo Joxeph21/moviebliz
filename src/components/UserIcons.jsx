@@ -12,7 +12,7 @@ function UserIcons() {
   const [openSearch, setOpenSearch] = useState(false);
   const { navOpen } = useSidebar();
   const [query, setQuery] = useState("");
-  const [imageLoaded, setImageLoaded] = useState(false);  // Image loading state
+  const [imageLoaded, setImageLoaded] = useState(false); // Image loading state
   const navigate = useNavigate();
   const inputElement = useRef(null);
   const { user } = useAuth();
@@ -76,9 +76,9 @@ function UserIcons() {
   useEffect(() => {
     if (profileImage) {
       const img = new Image();
-      img.src = `src/user/profile-pics/${profileImage}`;
+      img.src = `src/user/profile-pics/${profileImage.toLowerCase()}`;
       img.onload = () => setImageLoaded(true);
-      img.onerror = () => setImageLoaded(false);  // Handle error loading image
+      img.onerror = () => setImageLoaded(false); // Handle error loading image
     }
   }, [profileImage]);
 
@@ -123,14 +123,16 @@ function UserIcons() {
             <div className="h-8 w-8 overflow-hidden rounded-sm">
               {imageLoaded ? (
                 <img
-                  src={`src/user/profile-pics/${profileImage}`}
+                  src={`src/user/profile-pics/${profileImage.toLowerCase()}`}
                   alt={name + `_profile_picture`}
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="h-full w-full bg-neutral-700 flex items-center justify-center">
-                  <span className="text-neutral-300">N/A</span>
-                </div> // Fallback for no image
+                <img
+                  src={`src/user/profile-pics/profile1.jpg`}
+                  alt={name + `_profile_picture`}
+                  className="h-full w-full object-cover"
+                />
               )}
             </div>
           </div>
