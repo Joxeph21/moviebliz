@@ -11,7 +11,7 @@ import BannerBox from "../components/BannerBox";
 import InfoSection from "../ui/InfoSection";
 import Rating from "../ui/Rating";
 import { CenterMode, Responsive } from "../ui/Slider";
-import Casts from "../ui/casts";
+import Casts from "../ui/Casts";
 import Empty from "../ui/Empty";
 import Reviews from "../ui/Reviews";
 import Section from "../components/Section";

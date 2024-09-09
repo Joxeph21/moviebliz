@@ -12,7 +12,7 @@ import { formatRuntime } from "../utils/helper";
 import InfoSection from "../ui/InfoSection";
 import Empty from "../ui/Empty";
 import BannerBox from "../components/BannerBox";
-import Casts from "../ui/casts";
+import Casts from "../ui/Casts";
 import { CenterMode, Responsive } from "../ui/Slider";
 import Reviews from "../ui/Reviews";
 import Section from "../components/Section";
