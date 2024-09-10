@@ -30,7 +30,7 @@ import { AuthProvider } from "./contexts/userAuthContext";
 import Browse from "./pages/Browse";
 import { useLayoutEffect } from "react";
 import Videos from "./pages/Videos";
-import { Analytics } from "@vercel/analytics/react"
+import { Analytics } from "@vercel/analytics/react";
 
 const queryClient = new QueryClient({
   defaultOptions: {
