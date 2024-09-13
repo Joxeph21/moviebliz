@@ -60,17 +60,9 @@ function Responsive({ array, render, type }) {
           slidesToScroll: 1,
         },
       },
+    
       {
-        breakpoint: 500,
-        settings: {
-          dots: false,
-          arrows: false,
-          slidesToShow: videoCard ? 1 : 3,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 370,
+        breakpoint: 401,
         settings: {
           dots: false,
           arrows: false,
