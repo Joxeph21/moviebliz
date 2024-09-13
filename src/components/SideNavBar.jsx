@@ -3,6 +3,7 @@ import { useSidebar } from "../contexts/sideBarContext";
 import SideNavLinks from "./SideNavLinks";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../features/Users/useUser";
+import guestImage from "../assets/profile10.jpg";
 
 function SideNavBar() {
   const { navOpen, setNavOpen } = useSidebar(false);
@@ -50,8 +51,8 @@ function SideNavBar() {
         <div className="flex h-max border-b border-neutral-300/50 p-4">
           <div className="flex w-full items-center gap-3">
             <img
-              src={avatar}
-              alt={username + `_profile_picture`}
+              src={avatar ? avatar : guestImage}
+              alt={username ? username : "guest" + `_profile_picture`}
               className="h-20 w-20 rounded-full"
             />
             <div onClick={handleClick}>
