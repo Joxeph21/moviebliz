@@ -13,7 +13,7 @@ function Responsive({ array, render, type }) {
     arrows: videoCard ? false : !arrayLength,
     infinite: false,
     speed: 500,
-    slidesToShow: videoCard ? 3 : arrayLength ? array.length : 8,
+    slidesToShow: videoCard ? 3 : arrayLength ? array.length : 6,
     slidesToScroll: 4,
     initialSlide: 0,
     responsive: [
@@ -52,7 +52,7 @@ function Responsive({ array, render, type }) {
         },
       },
       {
-        breakpoint: 525,
+        breakpoint: 550,
         settings: {
           dots: false,
           arrows: false,

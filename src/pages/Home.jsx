@@ -106,7 +106,7 @@ function Home() {
   return (
     <div className="grid h-max w-screen items-center p-0 text-gray-50">
       <div
-        className="relative hidden h-screen w-screen bg-center md:grid md:bg-cover"
+        className="relative hidden h-screen w-full bg-center md:grid md:bg-cover"
         style={{ backgroundImage: `url(${outerBanks})` }}
       >
         <div className="z-10 mx-8 mt-28 w-[30rem] space-y-6 self-center p-4">
