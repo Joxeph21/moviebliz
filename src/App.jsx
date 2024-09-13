@@ -111,7 +111,7 @@ function App() {
             <ReactQueryDevtools initialIsOpen={false} />
             <Analytics />
 
-            <ToastContainer />
+            <ToastContainer  pauseOnFocusLoss={false} pauseOnHover={false} hideProgressBar={true} />
           </ThemeProvider>
         </UserDataProvider>
       </AuthProvider>
