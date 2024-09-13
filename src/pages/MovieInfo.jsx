@@ -75,6 +75,8 @@ function MovieInfo() {
     release_date,
   } = movie;
 
+  const moviee = { id, title, release_date, movie_data: movie, poster_path };
+
   const videos = videosArray?.results;
   const similar = similiarArray?.results;
   const recommended = recArray?.results;
@@ -134,7 +136,6 @@ function MovieInfo() {
   return (
     <Banner>
       <BannerBox>
-     
         <div
           className={`relative flex w-full flex-col items-center justify-center ${imageLoaded.bannerImage ? "" : "animate-pulse bg-zinc-600 px-2"} px-10 py-20`}
           style={{
@@ -178,7 +179,7 @@ function MovieInfo() {
                   You Rated this movie {starRating}⭐
                 </p>
               )}
-              <Optionsmenu id={id} movie={movie} />
+              <Optionsmenu id={id} movie={moviee} />
               <p className="text-xs italic text-neutral-400">{tagline}</p>
               <TextExpander
                 isLong={isLong}

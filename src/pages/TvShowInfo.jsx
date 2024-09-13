@@ -82,6 +82,14 @@ function TvShowInfo() {
     name: original_name,
   } = tvShow;
 
+  const curTvshow = {
+    id,
+    title: original_name,
+    release_date: first_air_date,
+    movie_data: tvShow,
+    poster_path,
+  };
+
   const { cast } = credits;
 
   const reviews = reviewsArray?.results;
@@ -183,7 +191,7 @@ function TvShowInfo() {
                   You Rated this Show {starRating}⭐
                 </p>
               )}
-              <Optionsmenu id={id} movie={tvShow} />
+              <Optionsmenu id={id} movie={curTvshow} />
               <p className="text-center text-xs italic text-neutral-400 md:text-left">
                 {tagline}
               </p>
