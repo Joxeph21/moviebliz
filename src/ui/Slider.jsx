@@ -70,7 +70,7 @@ function Responsive({ array, render, type }) {
         },
       },
       {
-        breakpoint: 370,
+        breakpoint: 450,
         settings: {
           dots: false,
           arrows: false,
