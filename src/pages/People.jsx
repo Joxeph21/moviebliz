@@ -39,10 +39,15 @@ function People() {
   const Curryear = date.getFullYear();
 
   const age = Curryear - Number(birthday.split("-")[0]);
-  const gender = genderNum === 2 ? 'Male' : genderNum === 1 ? 'Female' : genderNum === 3 ? 'Non-binary ' : null
-
-  console.log(age);
-  console.log(details);
+  const gender =
+    genderNum === 2
+      ? "Male"
+      : genderNum === 1
+        ? "Female"
+        : genderNum === 3
+          ? "Non-binary "
+          : null(age);
+  details;
 
   if (error) {
     return error?.status === 404 ? (
@@ -79,20 +84,18 @@ function People() {
           </div>
 
           <div>
-            <div className="flex min-h-96 h-fit flex-col gap-5 p-4">
+            <div className="flex h-fit min-h-96 flex-col gap-5 p-4">
               <h1 className="text-center font-bebas text-5xl font-extrabold text-gray-50 md:text-6xl">
                 {name}
               </h1>
 
               <p className="p-2 indent-4 text-sm text-neutral-300">
-                {biography? biography : "No bio here 🕵️‍♂️"}
+                {biography ? biography : "No bio here 🕵️‍♂️"}
               </p>
-              <div className="flex w-full md:flex-col md:gap-5 justify-evenly">
+              <div className="flex w-full justify-evenly md:flex-col md:gap-5">
                 <p className="text-xs font-semibold text-neutral-200">
                   Gender:{" "}
-                  <span className="font-medium text-neutral-400">
-                    {gender}
-                  </span>
+                  <span className="font-medium text-neutral-400">{gender}</span>
                 </p>
                 <p className="text-xs font-semibold text-neutral-200">
                   Date of Birth:{" "}
@@ -107,7 +110,7 @@ function People() {
                   </span>
                 </p>
               </div>
-              <div className="flex w-full justify-between  md:flex-col md:gap-5">
+              <div className="flex w-full justify-between md:flex-col md:gap-5">
                 <p className="text-xs font-semibold text-neutral-200">
                   Known for:{" "}
                   <span className="font-medium text-neutral-400">

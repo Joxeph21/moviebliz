@@ -17,15 +17,13 @@ function Search() {
     (el) => el?.media_type !== "person",
   );
 
-
-
   useEffect(() => {
     setPage(currPage);
   }, [currPage]);
 
   if (isLoading) return <Loader />;
 
-  console.log(movies);
+  movies;
 
   if (movies?.length === 0) {
     return (

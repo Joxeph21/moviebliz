@@ -32,7 +32,7 @@ function Tvshows() {
       })
     : [];
 
-  console.log(tvShows);
+  tvShows;
 
   return (
     <Banner>
