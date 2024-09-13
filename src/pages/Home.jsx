@@ -22,7 +22,7 @@ import { useWatchlist } from "../features/Userdata/useWatchlist";
 import { useAddWatchlist } from "../features/Userdata/watchlist/useAddWatchlist";
 import { useDeleteWatchlist } from "../features/Userdata/watchlist/useDeletefromWatchlist";
 
-const movie = {
+const movie1 = {
   adult: false,
   backdrop_path: "/5O7CEMnV5bgJEj5pxf6XlhjqatC.jpg",
   genre_ids: [10759, 18, 9648],
@@ -38,6 +38,14 @@ const movie = {
   name: "Outer Banks",
   vote_average: 8.396,
   vote_count: 853,
+};
+
+const movie = {
+  id: movie1.id,
+  title: movie1.original_name,
+  release_date: movie1.first_air_date,
+  movie_data: movie1,
+  poster_path: movie1.poster_path,
 };
 
 function Home() {
@@ -102,7 +110,6 @@ function Home() {
       addtoWatchlist(movie);
     }
   }
-
   return (
     <div className="grid h-max w-screen items-center p-0 text-gray-50">
       <div

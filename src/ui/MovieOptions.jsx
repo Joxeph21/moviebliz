@@ -11,6 +11,7 @@ import { useDeleteFavorite } from "../features/Userdata/favorites/useDeletefromF
 import { useAddLists } from "../features/Userdata/lists/useAddLists";
 import { useList } from "../features/Userdata/lists/useLists";
 import { useDeleteFromList } from "../features/Userdata/lists/useDeletefromLists";
+import { useNavigate } from "react-router-dom";
 
 function MovieOptions({ id, movie, setOpenMenu }) {
   const { addtoWatchlist, isLoading: addingtoWatchlist } = useAddWatchlist();
@@ -26,8 +27,10 @@ function MovieOptions({ id, movie, setOpenMenu }) {
   const { deleteListMovie, isLoading: isDeletingList } = useDeleteFromList();
   const { user, isAuthenticated } = useUser();
 
+  const navigate = useNavigate()
+
   const isInWatchlist = watchlist?.find((el) => id === el?.id) ? true : false;
-  const isInList = lists.find((el) => id === el?.id) ? true : false;
+  const isInList = lists?.find((el) => id === el?.id) ? true : false;
   const isInFavorites = favorites?.find((el) => id === el?.id) ? true : false;
 
   const menuRef = useOutsideClick(() => setOpenMenu(false));
@@ -48,7 +51,7 @@ function MovieOptions({ id, movie, setOpenMenu }) {
     if (name === "Watchlist") {
       if (disabled) {
         toast.error("User must be Logged in", { autoClose: 500 });
-
+        navigate("/login")
         setOpenMenu(false);
         return;
       }

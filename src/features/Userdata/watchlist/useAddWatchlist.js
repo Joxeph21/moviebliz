@@ -20,7 +20,7 @@ export function useAddWatchlist() {
       });
     },
     onError: () =>
-      toast.error("Failed to Add", {
+      toast.error("User must be logged in", {
         autoClose: 1000,
       }),
   });
