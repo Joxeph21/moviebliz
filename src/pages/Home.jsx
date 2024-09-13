@@ -18,6 +18,9 @@ import Empty from "../ui/Empty";
 import PersonalizationForm from "../forms/PersonalizationForm";
 import { useMovies } from "../features/Movies/useMovies";
 import { useTv } from "../features/TvShows/useTv";
+import { useWatchlist } from "../features/Userdata/useWatchlist";
+import { useAddWatchlist } from "../features/Userdata/watchlist/useAddWatchlist";
+import { useDeleteWatchlist } from "../features/Userdata/watchlist/useDeletefromWatchlist";
 
 const movie = {
   adult: false,
@@ -38,8 +41,9 @@ const movie = {
 };
 
 function Home() {
-  const { watchlistArray, Add_To_Watchlist, Remove_From_Watchlist } =
-    useUserData();
+  const { watchlist } = useWatchlist();
+  const { addtoWatchlist } = useAddWatchlist();
+  const { deleteWatchlistMovie } = useDeleteWatchlist();
   const { trendingMovies, isLoadingMovie, error: error1 } = useTrendingMovies();
   const {
     movies,
@@ -64,16 +68,6 @@ function Home() {
   const { trendingTv, isLoadingTv, error3 } = useTrendingTv();
   const navigate = useNavigate();
 
-  const { favoriteGenresArray, favoritesArray } = useUserData();
-
-  const favorite = favoritesArray?.filter((el) => el.similar)?.at(0);
-
-  const { name, title, first_air_date, similar: similarArray } = favorite || {};
-
-  const similar = similarArray?.results;
-
-  const isTv = first_air_date && name ? true : false;
-
   const isLoading = [
     isLoadingMovie,
     isLoadingTv,
@@ -82,10 +76,10 @@ function Home() {
     isLoadingm,
     isloadingt,
   ].some(Boolean);
-  
 
   if (isLoading) return <Loader />;
-  const hasError = (error1 || error2 || error3 || error4 || error5 || error6) ? true : false;
+  const hasError =
+    error1 || error2 || error3 || error4 || error5 || error6 ? true : false;
 
   if (hasError)
     return (
@@ -97,30 +91,22 @@ function Home() {
       />
     );
 
-  const isInArray = watchlistArray.find((el) => movie.id === el.id)
-    ? true
-    : false;
+  const isInArray = watchlist?.find((el) => movie.id === el.id) ? true : false;
 
   const hasTrailers = trendingMovies?.filter((movie) => movie.officialTrailer);
 
   function handleWatchlist() {
     if (isInArray) {
-      Remove_From_Watchlist(movie.id);
-      toast.success("Removed from watchlist", {
-        autoClose: 1000,
-      });
+      deleteWatchlistMovie(movie.id);
     } else {
-      Add_To_Watchlist(movie);
-      toast.success("Added to watchlist", {
-        autoClose: 1000,
-      });
+      addtoWatchlist(movie);
     }
   }
 
   return (
     <div className="grid h-max w-screen items-center p-0 text-gray-50">
       <div
-        className="relative hidden h-screen w-full bg-center md:grid md:bg-cover"
+        className="relative hidden h-screen w-screen bg-center md:grid md:bg-cover"
         style={{ backgroundImage: `url(${outerBanks})` }}
       >
         <div className="z-10 mx-8 mt-28 w-[30rem] space-y-6 self-center p-4">
@@ -195,20 +181,21 @@ function Home() {
           )}
           type="videocard"
         />
-        {!favoriteGenresArray?.length > 0 && <PersonalizationForm />}
-        <Section title={"Top Rated Movies"} array={movies} query={"topRated"} />
         <Section
           title={"Top Rated Tv Shows"}
           array={tvShows}
           query={"topRatedTv"}
         />
+        <Section title={"Top Rated Movies"} array={movies} query={"topRated"} />
+        {/* {!favoriteGenresArray?.length > 0 && <PersonalizationForm />}
+      
         {favoriteGenresArray?.length > 0 && favoritesArray?.length > 0 && (
           <Section
             title={`Because you liked ${isTv ? name : title}`}
             array={similar}
             link={false}
           />
-        )}
+        )} */}
       </Banner>
     </div>
   );

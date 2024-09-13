@@ -29,8 +29,6 @@ function Optionsmenu({ id, movie }) {
   const { deleteFavoritesMovie } = useDeleteFavorite();
   const { deleteListMovie } = useDeleteFromList();
 
-
-
   const profile = user?.profile;
   const name = profile?.username;
 
