@@ -1,21 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useSidebar } from "../contexts/sideBarContext";
 import SideNavLinks from "./SideNavLinks";
-import { useAuth } from "../contexts/userAuthContext";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../features/Users/useUser";
 
 function SideNavBar() {
   const { navOpen, setNavOpen } = useSidebar(false);
   const sidebarElement = useRef(null);
-  const { user } = useAuth();
-  const { name, profileImage } = user;
+  const { user } = useUser();
   const navigate = useNavigate();
-
-  const [image, setImage] = useState("");
-
-  useEffect(() => {
-    setImage(profileImage ? profileImage : "profile1.jpg");
-  }, [profileImage]);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -45,6 +38,9 @@ function SideNavBar() {
     navigate("/user");
   }
 
+  const avatar = user?.profile?.avatar;
+  const username = user?.profile?.username;
+
   return (
     <div className="fixed inset-0 z-30 h-screen w-full bg-black/50 backdrop-blur-sm lg:hidden">
       <div
@@ -54,12 +50,14 @@ function SideNavBar() {
         <div className="flex h-max border-b border-neutral-300/50 p-4">
           <div className="flex w-full items-center gap-3">
             <img
-              src={`src/user/profile-pics/${image}`}
-              alt={name + `_profile_picture`}
+              src={avatar}
+              alt={username + `_profile_picture`}
               className="h-20 w-20 rounded-full"
             />
             <div onClick={handleClick}>
-              <h4 className="text-neutral-300">{name ? name : "Guest"}</h4>
+              <h4 className="text-neutral-300">
+                {username ? username : "Guest"}
+              </h4>
               <p className="text-xs text-neutral-500">View Profile</p>
             </div>
           </div>
