@@ -6,9 +6,9 @@ import Input from "../ui/Input";
 import LogoHeader from "../ui/LogoHeader";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { useAuth } from "../contexts/userAuthContext";
 import { toast } from "react-toastify";
-import { useEffect } from "react";
+import useLogin from "../features/Users/useLogin";
+import MiniLoader from "../ui/MiniLoader";
 
 const initialValues = {
   username: "",
@@ -16,27 +16,34 @@ const initialValues = {
 };
 
 const validationSchema = Yup.object({
-  username: Yup.string().required("Username or Email is required"),
+  username: Yup.string().required("Email is required"),
   password: Yup.string().required("Password cannot be empty"),
 });
 
 function Login() {
   const navigate = useNavigate();
-  const { Login: loginUser, user } = useAuth();
-  const { errorMessage } = user;
+  const { login } = useLogin();
 
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
+      const { username: identifier, password } = values;
       try {
-        await loginUser(values);
-        if (!errorMessage) {
-          setTimeout(() => {
-            setSubmitting(false);
-            navigate("/");
-          }, 2000);
-        }
+        await login(
+          { identifier, password },
+          {
+            onSuccess: () => {
+              setTimeout(() => {
+                setSubmitting(false);
+                navigate("/");
+              }, 2000);
+            },
+            onError: () => {
+              setSubmitting(false);
+            },
+          },
+        );
       } catch (error) {
         console.error(error);
         toast.error("Login failed, please try again.", {
@@ -56,18 +63,10 @@ function Login() {
     values,
     handleSubmit,
     touched,
+    isSubmitting,
     isValid,
     dirty,
   } = formik;
-
-  useEffect(() => {
-    if (errorMessage) {
-      toast.error(errorMessage, {
-        position: "top-center",
-        autoClose: 2000,
-      });
-    }
-  }, [errorMessage]);
 
   return (
     <FormBanner>
@@ -98,18 +97,23 @@ function Login() {
             errorMessage={errors.password}
             name="password"
           />
+
+          <Link className="font-bold text-green-400" to="/pasword_reset">
+            Forgot Password?
+          </Link>
           <p className="text-sm text-neutral-50">
             Don&apos;t have an account?{" "}
-            <Link className="text-green-400" to="/create-account">
+            <Link className="font-bold text-green-400" to="/create-account">
               Register
             </Link>
           </p>
           <Button
+            buttonType={"submit"}
             type="primary"
             size="large"
             disabled={!isValid || !dirty}
           >
-            Login
+            {isSubmitting ? <MiniLoader /> : "Login"}
           </Button>
         </div>
       </Form>

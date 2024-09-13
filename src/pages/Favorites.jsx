@@ -1,15 +1,17 @@
 import { HiX } from "react-icons/hi";
-import { useUserData } from "../contexts/userDataContext";
 import Banner from "../ui/Banner";
 import Box from "../components/Box";
 import Button from "../ui/Button";
 import MovieGrid from "../ui/MovieGrid";
 import Empty from "../ui/Empty";
+import { useFavorites } from "../features/Userdata/favorites/useFavorites";
+import { useClearfavorites } from "../features/Userdata/favorites/useDeletefromFavorites";
 
 function Favorites() {
-  const { favoritesArray, ClearFavorites } = useUserData();
+  const { favorites } = useFavorites();
+  const { clearFavorites, clearingFavorites } = useClearfavorites();
 
-  if (!favoritesArray.length)
+  if (!favorites.length)
     return (
       <Empty
         icon="👀"
@@ -21,13 +23,14 @@ function Favorites() {
     );
   return (
     <Banner>
-      <Box title={`Favourites (${favoritesArray.length})`} />
-      <MovieGrid array={favoritesArray} />
+      <Box title={`Favourites (${favorites.length})`} />
+      <MovieGrid array={favorites} />
       <div className="mt-4">
         <Button
           icon={<HiX />}
-          onClick={() => ClearFavorites()}
+          onClick={() => clearFavorites()}
           type={"primary"}
+          disabled={clearingFavorites}
         >
           Clear Favorites
         </Button>

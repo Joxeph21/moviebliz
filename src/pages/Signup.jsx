@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../ui/Button";
 import Form from "../ui/Form";
 import FormBanner from "../ui/FormBanner";
@@ -7,7 +7,7 @@ import Input from "../ui/Input";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import MiniLoader from "../ui/MiniLoader";
-import { useAuth } from "../contexts/userAuthContext";
+import { useSignup } from "../features/Users/useSignUp";
 
 const initialValues = {
   email: "",
@@ -21,28 +21,42 @@ const validationSchema = Yup.object({
     .email(`That doesn't look like an email ☹️`)
     .required("We really need your email ☹️"),
   username: Yup.string().required("Username cannot be empty"),
-  password: Yup.string().required("Password cannot be empty"),
+  password: Yup.string()
+    .min(8, "Password must be at least 8 characters long")
+    .required("Password cannot be empty"),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password"), null], "Your Passwords don't look the same 👀")
     .required(`C'mon this can't be empty 🙄`),
 });
 
 function Signup() {
-  const { Register } = useAuth();
+  const { signUp, isLoading } = useSignup();
   const navigate = useNavigate();
 
-  const onSubmit = (values, { setSubmitting }) => {
+  const onSubmit = async (values, { setSubmitting }) => {
     try {
-      Register(values);
-      setTimeout(() => {
-        setSubmitting(false);
-        navigate("/");
-      }, 2000);
-    } catch (error) {
-      console.error(error);
+      await signUp(values, {
+        onSuccess: () => {
+          setTimeout(() => {
+            setSubmitting(false);
+            navigate("/");
+          }, 1000);
+        },
+        onError: (error) => {
+          if (error.message === "User already registered") {
+            setTimeout(() => {
+              navigate("/login");
+            }, 2000);
+          }
+          setSubmitting(false);
+        },
+      });
+    } catch (err) {
+      console.error(err);
       setSubmitting(false);
     }
   };
+
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -61,7 +75,6 @@ function Signup() {
     isSubmitting,
   } = formik;
   const { username, email, password, confirmPassword } = values;
-
 
   return (
     <FormBanner>
@@ -93,7 +106,7 @@ function Signup() {
             name={"username"}
           />
           <Input
-            title={"Password"}
+            title={"Password (at least 8 characters)"}
             placeholder={"Password"}
             type={"password"}
             required={true}
@@ -102,7 +115,7 @@ function Signup() {
             onBlur={handleBlur}
             error={errors.password && touched.password ? true : false}
             errorMessage={errors.password}
-            name={"password"} // Corrected the typo here
+            name={"password"}
           />
           <Input
             title={"Confirm Password"}
@@ -119,12 +132,11 @@ function Signup() {
             name={"confirmPassword"}
           />
 
-          {/* <p>
-            Already have an Account?{" "}
-            <Link to={"/Login"} className="text-green-400">
-              Log in
+          <p className="text-sm text-neutral-50">
+            Already have an account? <Link className="text-green-400 font-semibold" to="/login">
+              Login
             </Link>
-          </p> */}
+          </p>
 
           <h4>
             By clicking the{" "}
@@ -138,9 +150,9 @@ function Signup() {
             size="large"
             type={"primary"}
             buttonType={"submit"}
-            disabled={!isValid || isSubmitting || !dirty}
+            disabled={!isValid || isSubmitting || isLoading || !dirty}
           >
-            {isSubmitting ? <MiniLoader /> : "Create your account"}
+            {isSubmitting || isLoading ? <MiniLoader /> : "Create your account"}
           </Button>
         </div>
       </Form>

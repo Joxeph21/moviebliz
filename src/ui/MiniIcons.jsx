@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 
 const MiniIcons = forwardRef(
   (
-    { condition = false, icon, onAdd, onRemove, message, disabled = false },
+    { condition = false, icon, onAdd, onRemove,  disabled = false },
     ref,
   ) => {
     function handleFunc() {
@@ -15,14 +15,8 @@ const MiniIcons = forwardRef(
       }
       if (condition) {
         onRemove();
-        toast.success(message, {
-          autoClose: 1000,
-        });
       } else {
         onAdd();
-        toast.success(message, {
-          autoClose: 1000,
-        });
       }
     }
 

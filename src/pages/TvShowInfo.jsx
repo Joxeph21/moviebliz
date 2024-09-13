@@ -50,7 +50,7 @@ function TvShowInfo() {
 
   if (isLoading) return <Loader />;
 
-  if (error)
+  if (error || !tvShow)
     return (
       <Empty
         title={"Ooops...My bad"}

@@ -3,9 +3,13 @@ import { useSidebar } from "../contexts/sideBarContext";
 import Link from "./Link";
 import { MdAccessTimeFilled, MdMovie } from "react-icons/md";
 import { RiMovie2Fill } from "react-icons/ri";
+import { NavLink } from "react-router-dom";
+import { useUser } from "../features/Users/useUser";
 
 function Navlinks() {
+  const { user, isAuthenticated } = useUser();
   const { setNavOpen } = useSidebar();
+  const name = user?.profile?.username;
   return (
     <>
       <Link
@@ -29,6 +33,18 @@ function Navlinks() {
       >
         Movies
       </Link>
+
+      {(!name || !isAuthenticated) && (
+        <NavLink
+          to={"/user"}
+          onClick={() => setNavOpen(false)}
+          className={({ isActive }) =>
+            `text-gray-200 ${isActive ? "font-bold text-green-400" : ""} hidden lg:block`
+          }
+        >
+          Profile
+        </NavLink>
+      )}
 
       <Link
         onClick={() => setNavOpen(false)}

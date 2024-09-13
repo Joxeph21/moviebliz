@@ -5,7 +5,8 @@ import Form from "../../ui/Form";
 import StarRating from "../../ui/StarRating";
 import { toast } from "react-toastify";
 import MiniLoader from "../../ui/MiniLoader";
-import { useUserData } from "../../contexts/userDataContext";
+import { useAddReview } from "../../features/Userdata/Reviews/useReviewOptions";
+import { useReviews } from "../../features/Userdata/Reviews/useReviews";
 
 const validationSchema = Yup.object({
   reviewText: Yup.string().required("Review text is required"),
@@ -13,10 +14,11 @@ const validationSchema = Yup.object({
 });
 
 function UserReviewForm({ name = "movie", movie, onCloseModal }) {
-  const { Add_Review, Edit_Review, reviewsArray } = useUserData();
+  const { reviews } = useReviews();
+  const { addReview, isLoading: addingReview } = useAddReview();
 
-  const existingReview = reviewsArray?.find(
-    (review) => review.movie.id === movie.id
+  const existingReview = reviews?.find(
+    (review) => review.movie.id === movie.id,
   );
 
   const formik = useFormik({
@@ -28,16 +30,27 @@ function UserReviewForm({ name = "movie", movie, onCloseModal }) {
     onSubmit: (values, { setSubmitting }) => {
       try {
         if (existingReview) {
-          Edit_Review({ ...existingReview, ...values });
           toast.success("Review updated!", { autoClose: 1000 });
         } else {
-          Add_Review({ ...values, movie });
-          toast.success("Review submitted!", { autoClose: 1000 });
+          addReview(
+            { ...values, movie },
+            {
+              onError: (err) => {
+                if (err.message === "User must be logged in") {
+                  toast.error("Log in to review movies", {
+                    autoClose: 1000,
+                  });
+                }
+              },
+            },
+          );
         }
-        setTimeout(() => {
-          setSubmitting(false);
-          onCloseModal?.(); // Close modal after submission
-        }, 1000);
+        if (!addingReview) {
+          setTimeout(() => {
+            setSubmitting(false);
+            onCloseModal?.();
+          }, 1000);
+        }
       } catch (error) {
         console.error(error);
         setSubmitting(false);
@@ -50,7 +63,9 @@ function UserReviewForm({ name = "movie", movie, onCloseModal }) {
       title={existingReview ? "Edit Review" : "Add a Review"}
       onSubmit={formik.handleSubmit}
     >
-      <div className={`flex w-full flex-col ${formik.isSubmitting ? 'blur-sm' : 'blur-none'} items-center gap-6 rounded-lg bg-neutral-900 p-6 shadow-lg`}>
+      <div
+        className={`flex w-full flex-col ${formik.isSubmitting ? "blur-sm" : "blur-none"} items-center gap-6 rounded-lg bg-neutral-900 p-6 shadow-lg`}
+      >
         <div className="w-full space-y-4">
           <h3 className="text-left text-sm font-medium text-gray-50">
             How would you rate <span className="text-green-600">{name}?</span>{" "}
@@ -89,7 +104,11 @@ function UserReviewForm({ name = "movie", movie, onCloseModal }) {
           >
             Cancel
           </Button>
-          <Button type="primary" size="small" disabled={formik.isSubmitting || !formik.dirty}>
+          <Button
+            type="primary"
+            size="small"
+            disabled={formik.isSubmitting || !formik.dirty}
+          >
             {formik.isSubmitting ? <MiniLoader /> : "Submit"}
           </Button>
         </div>

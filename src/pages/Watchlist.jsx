@@ -7,11 +7,24 @@ import Empty from "../ui/Empty";
 import MovieGrid from "../ui/MovieGrid";
 import Modal from "../ui/Modal";
 import ConfirmDelete from "../ui/ConfirmDelete";
+import { useWatchlist } from "../features/Userdata/useWatchlist";
+import Loader from "../ui/Loader";
+import { useUser } from "../features/Users/useUser";
+import { useClearWatchlist } from "../features/Userdata/watchlist/useDeletefromWatchlist";
 
 function Watchlist() {
+  const { user, isLoading: loadingUser } = useUser();
   const { watchlistArray, Clear_Watchlist } = useUserData();
+  const { watchlist, isLoading: watchlistLoading } = useWatchlist();
+  const { clearWatchlist, clearingWatchlist } = useClearWatchlist();
 
-  if (!watchlistArray.length)
+  const isLoading = loadingUser || watchlistLoading || clearingWatchlist;
+
+  if (isLoading) return <Loader />;
+
+  const profile = user?.profile;
+
+  if (profile?.username ? !watchlist.length : !watchlistArray.length)
     return (
       <Empty
         icon="👀"
@@ -22,10 +35,20 @@ function Watchlist() {
       />
     );
 
+  function handleClearWatchlist() {
+    if (profile?.username) {
+      clearWatchlist();
+    } else {
+      Clear_Watchlist();
+    }
+  }
+
   return (
     <Banner>
-      <Box title={`Watchlist (${watchlistArray.length})`} />
-      <MovieGrid array={watchlistArray} />
+      <Box
+        title={`Watchlist (${profile?.username ? watchlist.length : watchlistArray.length})`}
+      />
+      <MovieGrid array={profile?.username ? watchlist : watchlistArray} />
       <div className="mt-4">
         <Modal>
           <Modal.Open opens={"clearWatchlist"}>
@@ -36,7 +59,7 @@ function Watchlist() {
           <Modal.Window name={"clearWatchlist"}>
             <ConfirmDelete
               resourceName="Watchlist"
-              onConfirm={() => Clear_Watchlist()}
+              onConfirm={handleClearWatchlist}
             />
           </Modal.Window>
         </Modal>

@@ -20,10 +20,10 @@ export async function fetchMovies({ filter = "popular", page = 1 }) {
         language: "en-US",
       },
     });
-    return { data: response.data.results, error: null };
+    return { data: response?.data?.results, error: null };
   } catch (err) {
     console.log(err.message);
-    return { data: null, error: err };
+    return { data: null, error: err.message };
   }
 }
 
@@ -40,7 +40,7 @@ export async function getMovie(id) {
     return { data: response.data, error: null };
   } catch (err) {
     console.log(err.message);
-    return { data: null, error: err.response };
+    return { data: null, error: err.message };
   }
 }
 

@@ -11,6 +11,13 @@ function MovieCard({ movieInfo }) {
   const { poster_path, title, id, release_date, name, first_air_date } =
     movieInfo;
 
+  const movie = {
+    id,
+    poster_path,
+    title,
+    release_date,
+    movie_data: movieInfo,
+  };
   const year = release_date?.split("-")[0] || first_air_date?.split("-")[0];
 
   const isTv = first_air_date && name ? true : false;
@@ -49,7 +56,7 @@ function MovieCard({ movieInfo }) {
 
       {/* Fixed menu (outside the blurred content) */}
       {openMenu && (
-        <MovieOptions id={id} movie={movieInfo} setOpenMenu={setOpenMenu} />
+        <MovieOptions id={id} movie={movie} setOpenMenu={setOpenMenu} />
       )}
     </div>
   );

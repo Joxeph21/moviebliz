@@ -4,7 +4,7 @@ function Link({ onClick, children, LinkTo, icon }) {
   if (!LinkTo)
     return (
       <li
-        className="flex items-center gap-4 text-xs font-bold text-gray-200"
+        className="flex items-center gap-4 text-xs font-bold text-gray-200 sm:flex"
         onClick={onClick}
       >
         {icon && <span>{icon}</span>} {children}{" "}

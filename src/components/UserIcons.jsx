@@ -6,17 +6,16 @@ import Button from "../ui/Button";
 
 import { LuSearch } from "react-icons/lu";
 import { useSidebar } from "../contexts/sideBarContext";
-import { useAuth } from "../contexts/userAuthContext";
+import { useUser } from "../features/Users/useUser";
+import MiniLoader from "../ui/MiniLoader";
 
 function UserIcons() {
   const [openSearch, setOpenSearch] = useState(false);
   const { navOpen } = useSidebar();
   const [query, setQuery] = useState("");
-  const [imageLoaded, setImageLoaded] = useState(false); // Image loading state
   const navigate = useNavigate();
   const inputElement = useRef(null);
-  const { user } = useAuth();
-  const { name, isAuthenticated, profileImage } = user;
+  const { user, isLoading } = useUser();
 
   useKey(["Enter", "Done", "Go"], () => {
     if (query && document.activeElement === inputElement.current) {
@@ -72,15 +71,11 @@ function UserIcons() {
     setOpenSearch(true);
   }
 
-  // Ensure the image loads properly
-  useEffect(() => {
-    if (profileImage) {
-      const img = new Image();
-      img.src = `src/user/profile-pics/${profileImage}`;
-      img.onload = () => setImageLoaded(true);
-      img.onerror = () => setImageLoaded(false); // Handle error loading image
-    }
-  }, [profileImage]);
+  if (isLoading) return <MiniLoader />;
+  
+  const profile = user?.profile;
+  const name = profile?.username;
+  const avatar = profile?.avatar;
 
   return (
     <div
@@ -104,14 +99,23 @@ function UserIcons() {
         />
       )}
       <div className="hidden sm:block">
-        {!name && !isAuthenticated ? (
-          <Button
-            onClick={() => navigate("/create-account")}
-            type={"primary"}
-            size="small"
-          >
-            Sign up
-          </Button>
+        {!name ? (
+          <div className="flex gap-3">
+            <Button
+              onClick={() => navigate("/login")}
+              type={"login"}
+              size="small"
+            >
+              Sign in
+            </Button>
+            <Button
+              onClick={() => navigate("/create-account")}
+              type={"primary"}
+              size="small"
+            >
+              Sign up
+            </Button>
+          </div>
         ) : (
           <div
             onClick={() => navigate("/user")}
@@ -121,19 +125,11 @@ function UserIcons() {
               <span className="hover:underline">{name}</span>
             </h2>
             <div className="h-8 w-8 overflow-hidden rounded-sm">
-              {imageLoaded ? (
-                <img
-                  src={`src/user/profile-pics/${profileImage}`}
-                  alt={name + `_profile_picture`}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <img
-                  src={`src/user/profile-pics/profile1.jpg`}
-                  alt={name + `_profile_picture`}
-                  className="h-full w-full object-cover"
-                />
-              )}
+              <img
+                src={avatar}
+                alt={name + `_profile_picture`}
+                className="h-full w-full object-cover"
+              />
             </div>
           </div>
         )}

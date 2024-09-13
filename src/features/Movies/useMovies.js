@@ -5,13 +5,13 @@ export function useMovies({ filter, page }) {
   const {
     data: moviesArray,
     isLoading,
-    error,
   } = useQuery({
     queryFn: () => fetchMovies({ filter, page }),
     queryKey: ["movie", filter, page],
   });
 
   const movies = moviesArray?.data;
+  const error = moviesArray?.error
   return {
     movies,
     isLoading,

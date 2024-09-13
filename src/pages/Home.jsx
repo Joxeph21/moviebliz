@@ -82,9 +82,10 @@ function Home() {
     isLoadingm,
     isloadingt,
   ].some(Boolean);
-  const hasError = error1 || error2 || error3 || error4 || error5 || error6;
+  
 
   if (isLoading) return <Loader />;
+  const hasError = (error1 || error2 || error3 || error4 || error5 || error6) ? true : false;
 
   if (hasError)
     return (

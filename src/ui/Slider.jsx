@@ -13,14 +13,23 @@ function Responsive({ array, render, type }) {
     arrows: videoCard ? false : !arrayLength,
     infinite: false,
     speed: 500,
-    slidesToShow: videoCard ? 3 : arrayLength ? array.length : 6,
+    slidesToShow: videoCard ? 3 : arrayLength ? array.length : 8,
     slidesToScroll: 4,
     initialSlide: 0,
     responsive: [
       {
+        breakpoint: 1100,
+        settings: {
+          slidesToShow: videoCard ? 3 : 6,
+          slidesToScroll: 3,
+          infinite: false,
+          dots: false,
+        },
+      },
+      {
         breakpoint: 1024,
         settings: {
-          slidesToShow: videoCard ? 3 : 4,
+          slidesToShow: videoCard ? 3 : 5,
           slidesToScroll: 3,
           infinite: false,
           dots: false,
@@ -29,7 +38,7 @@ function Responsive({ array, render, type }) {
       {
         breakpoint: 1000,
         settings: {
-          slidesToShow: videoCard ? 2 : 4,
+          slidesToShow: videoCard ? 2 : 5,
           slidesToScroll: 2,
           initialSlide: 1,
         },
@@ -37,13 +46,31 @@ function Responsive({ array, render, type }) {
       {
         breakpoint: 700,
         settings: {
-          slidesToShow: videoCard ? 1 : 3,
+          slidesToShow: videoCard ? 2 : 4,
           slidesToScroll: 2,
           initialSlide: 1,
         },
       },
       {
-        breakpoint: 480,
+        breakpoint: 525,
+        settings: {
+          dots: false,
+          arrows: false,
+          slidesToShow: videoCard ? 1 : 3,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 500,
+        settings: {
+          dots: false,
+          arrows: false,
+          slidesToShow: videoCard ? 1 : 3,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 370,
         settings: {
           dots: false,
           arrows: false,
@@ -52,7 +79,7 @@ function Responsive({ array, render, type }) {
         },
       },
       {
-        breakpoint: 320,
+        breakpoint: 250,
         settings: {
           dots: false,
           arrows: false,
@@ -65,7 +92,7 @@ function Responsive({ array, render, type }) {
   if (array.length === 0) return <Loader />;
   return (
     <div
-      className={`slider-container  ${!videoCard ? (array.length === 1 ? "lg:w-[13em]" : array.length === 2 ? "lg:w-[30em]" : array.length === 3 ? "lg:w-[42em]" : array.length === 4 ? "lg:w-[60em]" : array.length === 5 ? "" : "") : ""} `}
+      className={`slider-container ${!videoCard ? (array.length === 1 ? "lg:w-[13em]" : array.length === 2 ? "lg:w-[30em]" : array.length === 3 ? "lg:w-[42em]" : array.length === 4 ? "lg:w-[60em]" : array.length === 5 ? "" : "") : ""} `}
     >
       <Slider {...settings}>{array.map(render)}</Slider>
     </div>
@@ -83,13 +110,19 @@ function CenterMode({ array, render }) {
     arrows: false,
     infinite: false,
     centerPadding: "60px",
-    slidesToShow: arrayLength ? 2 : 3,
+    slidesToShow: arrayLength ? 2 : 5,
     speed: 500,
     responsive: [
       {
-        breakpoint: 1000,
+        breakpoint: 1250,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 4,
+        },
+      },
+      {
+        breakpoint: 1050,
+        settings: {
+          slidesToShow: 3,
         },
       },
       {
@@ -100,17 +133,24 @@ function CenterMode({ array, render }) {
         },
       },
       {
-        breakpoint: 680,
+        breakpoint: 605,
+        settings: {
+          slidesToShow: 2,
+          centerPadding: "10px",
+        },
+      },
+      {
+        breakpoint: 545,
         settings: {
           slidesToShow: 1,
-          centerPadding: "40px",
+          centerPadding: "10px",
         },
       },
     ],
   };
 
   return (
-    <div className="slider-container ">
+    <div className="slider-container">
       <Slider {...settings}>{array.map(render)}</Slider>
     </div>
   );

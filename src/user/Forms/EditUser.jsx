@@ -1,4 +1,3 @@
-import { useAuth } from "../../contexts/userAuthContext";
 import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import Input from "../../ui/Input";
@@ -7,89 +6,97 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import MiniLoader from "../../ui/MiniLoader";
-
-const imgSrc = "src/user/profile-pics/";
+import { useUser } from "../../features/Users/useUser";
+import Loader from "../../ui/Loader";
+import { useUpdateUser } from "../../features/Users/useUpdateUser";
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Username is required"),
-  email: Yup.string()
-    .email("Invalid email address")
-    .required("Email is required"),
 });
 
 function EditUser({ onCloseModal }) {
-  const { user, updateProfilePic, updateUserDetails } = useAuth();
-
-  const [selectedImg, setSelectedImg] = useState(
-    user.profileImage || "profile1.jpg",
-  );
+  const { user, isLoading } = useUser();
+  const { updateUser, isUpdating } = useUpdateUser();
+  const [previewImage, setPreviewImage] = useState(user?.profile?.avatar || "");
+  const [selectedFile, setSelectedFile] = useState(null); // store the file itself
 
   const formik = useFormik({
     initialValues: {
-      name: user.name,
-      email: user.email,
+      name: user?.profile?.username || "",
     },
     validationSchema,
-    onSubmit: (values, { setSubmitting }) => {
-      updateProfilePic(selectedImg);
+    onSubmit: async (values, { setSubmitting }) => {
       try {
-        updateUserDetails(values);
-        toast.success("Updated Profile", {
-          autoClose: 1000,
-        });
-        setTimeout(() => {
-          setSubmitting(false);
-          onCloseModal?.();
-        }, 1000);
+        await updateUser(
+          {
+            username: values.name,
+            avatar: selectedFile, // pass the actual file here
+          },
+          {
+            onSuccess: () => {
+              setSubmitting(false);
+              onCloseModal?.();
+            },
+            onError: () => {
+              setSubmitting(false);
+            },
+          }
+        );
       } catch (error) {
         console.error(error);
+        toast.error("An error occurred. Please try again.");
         setSubmitting(false);
       }
     },
   });
 
-  const handleImageClick = (imgName) => {
-    setSelectedImg(imgName);
+  if (isLoading) return <Loader />;
+  
+  const { profile } = user;
+  const { username, avatar } = profile;
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setPreviewImage(previewUrl);
+      setSelectedFile(file);
+    }
   };
 
   return (
-    <Form title={"Update Profile"} onSubmit={formik.handleSubmit}>
-      <div className={`h-full w-full ${formik.isSubmitting ? "blur-sm" : ""} flex flex-col items-center`}>
-        <div className="flex w-1/2 items-center justify-between rounded-lg bg-neutral-500/20 p-4 shadow-md md:w-[40em]">
-          <div className="relative flex h-40 w-40 overflow-hidden rounded-lg border-2 border-green-300 shadow-md">
+    <Form title="Update Profile" onSubmit={formik.handleSubmit}>
+      <div
+        className={`h-full w-full ${
+          formik.isSubmitting || isUpdating ? "blur-sm" : ""
+        } flex flex-col items-center`}
+      >
+        <div className="flex flex-col items-center justify-center gap-5 rounded-lg p-6 shadow-md md:w-96">
+          <div className="relative flex h-40 w-40 overflow-hidden rounded-full border-4 border-[#328F29] shadow-md">
             <img
-              src={`${imgSrc}${selectedImg}`}
-              alt={`${formik.values.name}_profile_picture`}
+              src={previewImage || avatar}
+              alt={`${username}_profile_picture`}
               className="h-full w-full object-cover object-center"
             />
           </div>
-
-          <div className="flex w-2/3 gap-2 overflow-x-auto p-2">
-            {[...Array(10)].map((_, index) => {
-              const imgIndex = index + 1;
-              const imgName = `profile${imgIndex}.jpg`;
-              return (
-                <div
-                  key={imgIndex}
-                  onClick={() => handleImageClick(imgName)}
-                  className={`h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg border-2 ${
-                    selectedImg === imgName
-                      ? "border-blue-400"
-                      : "border-transparent"
-                  } cursor-pointer hover:border-blue-400`}
-                >
-                  <img
-                    className="h-full w-full object-cover object-center transition-transform duration-200 hover:scale-105"
-                    src={`${imgSrc}${imgName}`}
-                    alt={`profile${imgIndex}`}
-                  />
-                </div>
-              );
-            })}
-          </div>
+          <label
+            htmlFor="fileUpload"
+            className="relative inline-block cursor-pointer"
+          >
+            <span className="hover:bg-brandGreen-dark inline-block rounded bg-[#328F29] px-4 py-2 text-white shadow-md">
+              Upload Image
+            </span>
+            <input
+              id="fileUpload"
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+            />
+          </label>
         </div>
 
-        <div className="mt-10 space-y-5 w-fit  flex-col p-4">
+        <div className="w-full max-w-md space-y-6 px-6">
           <Input
             title="Username"
             name="name"
@@ -98,26 +105,26 @@ function EditUser({ onCloseModal }) {
             onBlur={formik.handleBlur}
             error={formik.touched.name && formik.errors.name}
             errorMessage={formik.errors.name}
+            placeholder="Enter your username"
+            className="focus:ring-2 focus:ring-brandGreen"
           />
-          <Input
-            title="Email"
-            name="email"
-            type="email"
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.email && formik.errors.email}
-            errorMessage={formik.errors.email}
-          />
-          <div className="flex w-full justify-end gap-3">
+
+          <div className="flex w-full justify-between gap-4">
             <Button
               type="secondary"
               size="small"
+              className="w-full"
               onClick={() => onCloseModal?.()}
             >
               Cancel
             </Button>
-            <Button type="primary" size="small" disabled={!formik.isValid}>
+            <Button
+              type="primary"
+              size="small"
+              buttonType="submit" 
+              className="w-full"
+              disabled={!formik.isValid || formik.isSubmitting}
+            >
               {formik.isSubmitting ? <MiniLoader /> : "Update"}
             </Button>
           </div>

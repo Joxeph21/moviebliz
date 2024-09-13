@@ -10,7 +10,7 @@ const options = {
   },
 };
 
-export async function fetchTv({ filter = 'popular', page = 1 }) {
+export async function fetchTv({ filter = "popular", page = 1 }) {
   try {
     const response = await axios.get(`${apiURL}tv/${filter}`, {
       params: {
@@ -40,12 +40,14 @@ export async function getTv(id) {
       params: {
         api_key: apiKey,
         language: "en-US",
-        append_to_response: "content_ratings,credits,reviews,recommendations,videos,similar",
+        append_to_response:
+          "content_ratings,credits,reviews,recommendations,videos,similar",
       },
     });
-    return response.data;
+    return { data: response?.data, error: null };
   } catch (err) {
     console.log(err.message);
+    return { data: null, error: err.message };
   }
 }
 
@@ -59,9 +61,9 @@ export async function getTrendingTv() {
       },
     });
 
-    return response.data.results;
+    return response?.data?.results;
   } catch (err) {
-    console.log(err.message);
+    console.log(err?.message);
   }
 }
 
@@ -77,7 +79,7 @@ export async function discoverTv() {
       },
     });
 
-    return { data: response.data.results, error: null };
+    return { data: response?.data?.results, error: null };
   } catch (err) {
     console.log(err.message);
     return { data: null, error: err };

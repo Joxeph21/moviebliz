@@ -3,53 +3,54 @@ import MiniIcons from "./MiniIcons";
 import { HiPlus } from "react-icons/hi2";
 import { LuHeart } from "react-icons/lu";
 import Button from "./Button";
-import { useUserData } from "../contexts/userDataContext";
 import { ImCheckmark } from "react-icons/im";
 import { FaHeart, FaThList } from "react-icons/fa";
 import { BiListCheck } from "react-icons/bi";
-import { useAuth } from "../contexts/userAuthContext";
 import Modal from "./Modal";
 import UserReviewForm from "../user/Forms/UserReviewForm";
-
-{
-  /* <FaHeart /> */
-  // <FaThList />
-}
+import { useWatchlist } from "../features/Userdata/useWatchlist";
+import { useFavorites } from "../features/Userdata/favorites/useFavorites";
+import { useList } from "../features/Userdata/lists/useLists";
+import { useReviews } from "../features/Userdata/Reviews/useReviews";
+import { useUser } from "../features/Users/useUser";
+import { useAddWatchlist } from "../features/Userdata/watchlist/useAddWatchlist";
+import { useDeleteWatchlist } from "../features/Userdata/watchlist/useDeletefromWatchlist";
+import { useDeleteFavorite } from "../features/Userdata/favorites/useDeletefromFavorites";
+import { useDeleteFromList } from "../features/Userdata/lists/useDeletefromLists";
+import { useAddFavorites } from "../features/Userdata/favorites/useAddFavorites";
+import { useAddLists } from "../features/Userdata/lists/useAddLists";
 
 function Optionsmenu({ id, movie }) {
-  const { user } = useAuth();
-  const { reviewsArray } = useUserData();
+  const { user, isAuthenticated } = useUser();
+  const { addtoWatchlist } = useAddWatchlist();
+  const { addtoFavorites } = useAddFavorites();
+  const { addtoLists } = useAddLists();
+  const { deleteWatchlistMovie } = useDeleteWatchlist();
+  const { deleteFavoritesMovie } = useDeleteFavorite();
+  const { deleteListMovie } = useDeleteFromList();
 
-  const {
-    watchlistArray,
-    Add_To_Watchlist,
-    Remove_From_Watchlist,
-    listsArray,
-    Add_To_list,
-    Remove_From_list,
-    favoritesArray,
-    Add_To_favorites,
-    Remove_From_favorites,
-  } = useUserData();
 
-  const existingReview = reviewsArray?.find(
-    (review) => review.movie.id === movie.id,
+
+  const profile = user?.profile;
+  const name = profile?.username;
+
+  const { watchlist } = useWatchlist();
+  const { favorites } = useFavorites();
+  const { lists } = useList();
+  const { reviews } = useReviews();
+
+  const existingReview = reviews?.find(
+    (review) => review?.movie?.id === movie?.id,
   );
 
   const { title: movieName, name: tvName } = movie;
 
   const Mname = movieName ? movieName : tvName;
 
-  const { name, isAuthenticated } = user;
+  const isInWatchlist = watchlist?.find((el) => id === el?.id) ? true : false;
 
-  const isInWatchlist = watchlistArray.find((el) => id === el?.id)
-    ? true
-    : false;
-
-  const isInList = listsArray.find((el) => id === el?.id) ? true : false;
-  const isInFavorites = favoritesArray.find((el) => id === el?.id)
-    ? true
-    : false;
+  const isInList = lists?.find((el) => id === el?.id) ? true : false;
+  const isInFavorites = favorites?.find((el) => id === el?.id) ? true : false;
 
   return (
     <div className="mb-3 flex w-80 flex-col items-center justify-evenly gap-3 md:flex-row">
@@ -64,13 +65,14 @@ function Optionsmenu({ id, movie }) {
             <div>
               <MiniIcons
                 condition={isInWatchlist}
+                disabled={!name || !isAuthenticated}
                 message={
                   isInWatchlist
                     ? "Removed from Watchlist"
                     : "Added to Watchlist"
                 }
-                onAdd={() => Add_To_Watchlist(movie)}
-                onRemove={() => Remove_From_Watchlist(id)}
+                onAdd={() => addtoWatchlist(movie)}
+                onRemove={() => deleteWatchlistMovie(id)}
                 icon={
                   !isInWatchlist ? (
                     <HiPlus color="white" size={15} />
@@ -102,8 +104,8 @@ function Optionsmenu({ id, movie }) {
                     ? "Removed from Favorites"
                     : "Added to Favorites"
                 }
-                onAdd={() => Add_To_favorites(movie)}
-                onRemove={() => Remove_From_favorites(id)}
+                onAdd={() => addtoFavorites(movie)}
+                onRemove={() => deleteFavoritesMovie(id)}
                 icon={
                   isInFavorites ? (
                     <FaHeart color="white" />
@@ -131,8 +133,8 @@ function Optionsmenu({ id, movie }) {
                 disabled={!name || !isAuthenticated}
                 condition={isInList}
                 message={isInList ? "Removed from List" : "Added to Lists"}
-                onAdd={() => Add_To_list(movie)}
-                onRemove={() => Remove_From_list(id)}
+                onAdd={() => addtoLists(movie)}
+                onRemove={() => deleteListMovie(id)}
                 icon={
                   isInList ? (
                     <BiListCheck size={20} color="white" />
@@ -152,7 +154,7 @@ function Optionsmenu({ id, movie }) {
         >
           <div>
             <Modal.Open opens={"reviewform"}>
-              <Button disabled={!name || !isAuthenticated} type={"primary"}>
+              <Button type={"primary"} disabled={!name || !isAuthenticated}>
                 {existingReview ? "Edit Review" : " Add a Review"}
               </Button>
             </Modal.Open>
